@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Final</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+ margin:0;
+ height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-family:'Poppins',sans-serif;
+ overflow:hidden;
+ background:radial-gradient(circle at top,#89d6ff,#3a86ff,#1b4ed8);
+ cursor:none;
+}
+
+/* stars */
+.star{position:absolute;width:2px;height:2px;background:white;opacity:.8;animation:twinkle 2s infinite alternate}
+@keyframes twinkle{to{opacity:.2}}
+
+/* cursor trail */
+.spark{position:absolute;width:10px;height:10px;border-radius:50%;pointer-events:none;animation:fade 1s linear forwards}
+@keyframes fade{to{opacity:0;transform:scale(2)}}
+
+/* envelope */
+.envelope{position:relative;width:230px;height:150px;background:white;border-radius:14px;cursor:pointer;box-shadow:0 30px 60px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;transition:.6s;z-index:5}
+.envelope:hover{transform:scale(1.08) rotate(-2deg)}
+.flap{position:absolute;top:-75px;border-left:115px solid transparent;border-right:115px solid transparent;border-bottom:75px solid white;transform-origin:bottom;transition:1.3s}
+.open .flap{transform:rotateX(180deg)}
+.tap{color:#3a86ff;font-weight:600}
+
+/* title */
+.big{position:absolute;font-size:75px;font-weight:600;color:white;text-shadow:0 0 40px white;opacity:0;transform:scale(.2);transition:1.2s;text-align:center}
+
+/* name */
+.name{position:absolute;font-size:95px;font-weight:600;color:white;text-shadow:0 0 60px white;opacity:0;transform:scale(.2);transition:1.2s}
+
+/* emojis */
+.float{position:absolute;animation:rise linear forwards}
+@keyframes rise{from{transform:translateY(0)}to{transform:translateY(-140vh);opacity:0}}
+
+/* letter */
+.letter{position:absolute;width:70%;max-width:720px;background:white;padding:50px;border-radius:28px;box-shadow:0 40px 80px rgba(0,0,0,.4);text-align:center;line-height:1.9;opacity:0;transform:translateY(100px) scale(.7);transition:1.6s;z-index:4}
+.type{border-right:3px solid #333;white-space:nowrap;overflow:hidden}
+
+/* slideshow */
+.slideshow{margin-top:25px;height:220px;position:relative;border-radius:18px;overflow:hidden}
+.slide{position:absolute;width:100%;height:100%;object-fit:cover;opacity:0;transition:1s}
+
+/* love meter */
+.meterWrap{margin-top:25px}
+.meter{height:18px;background:#eee;border-radius:20px;overflow:hidden}
+.meterFill{height:100%;width:0;background:linear-gradient(90deg,#ff4d6d,#ff9a9e);transition:3s}
+
+/* button */
+button{margin-top:25px;padding:14px 28px;border:none;border-radius:14px;background:#3a86ff;color:white;font-size:16px;cursor:pointer;box-shadow:0 10px 25px rgba(0,0,0,.25)}
+
+/* fireworks */
+.fire{position:absolute;width:6px;height:6px;border-radius:50%;animation:explode 1.2s ease-out forwards}
+@keyframes explode{to{transform:translate(var(--x),var(--y));opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="name" id="name">ANJALI 💖</div>
+
+<script>
+/* stars */
+for(let i=0;i<120;i++){
+ let s=document.createElement("div");
+ s.className="star";
+ s.style.left=Math.random()*100+"vw";
+ s.style.top=Math.random()*100+"vh";
+ s.style.animationDuration=(1+Math.random()*2)+"s";
+ document.body.appendChild(s);
+}
+
+/* cursor sparkles */
+document.addEventListener("mousemove",e=>{
+ let s=document.createElement("div");
+ s.className="spark";
+ s.style.left=e.pageX+"px";
+ s.style.top=e.pageY+"px";
+ s.style.background=`hsl(${Math.random()*360},100%,70%)`;
+ document.body.appendChild(s);
+ setTimeout(()=>s.remove(),1000);
+});
+</script>
+
+<div class="envelope" id="env"><div class="flap"></div><div class="tap">Open Me 💌</div></div>
+
+<div class="big" id="big">🎉 HAPPY BIRTHDAY MY LOVE 🎂</div>
+
+<div class="letter" id="letter">
+<h2>For You ❤️</h2>
+<p id="msg" class="type"></p>
+
+<div class="slideshow">
+<img class="slide" src="https://picsum.photos/900/400?1">
+<img class="slide" src="https://picsum.photos/900/400?2">
+<img class="slide" src="https://picsum.photos/900/400?3">
+</div>
+
+<div class="meterWrap">
+<p>Love Level 💞</p>
+<div class="meter"><div class="meterFill" id="fill"></div></div>
+</div>
+
+<button onclick="document.getElementById('voice').play()">Play My Voice 🎤</button>
+</div>
+
+<audio id="music" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
+<audio id="voice" src="https://cdn.pixabay.com/audio/2021/08/04/audio_12b0c7443c.mp3"></audio>
+
+<script>
+const env=document.getElementById("env");
+const big=document.getElementById("big");
+const letter=document.getElementById("letter");
+const msg=document.getElementById("msg");
+const music=document.getElementById("music");
+const name=document.getElementById("name");
+const fill=document.getElementById("fill");
+
+const message=`Happy Birthday my love 💖
+
+You are my happiness, my peace, my favorite person. Every second with you feels magical. ✨
+
+I hope today surrounds you with love, laughter and unforgettable memories.
+
+Forever yours ❤️`;
+
+function typeWriter(text,i=0){
+ if(i<text.length){
+  msg.textContent+=text.charAt(i);
+  setTimeout(()=>typeWriter(text,i+1),30);
+ }
+}
+
+function emojis(){
+ const icons=["🎈","💖","🎂","🎉","💝","✨"];
+ for(let i=0;i<90;i++){
+  let el=document.createElement("div");
+  el.className="float";
+  el.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+  el.style.left=Math.random()*100+"vw";
+  el.style.bottom="-20px";
+  el.style.fontSize=(20+Math.random()*50)+"px";
+  el.style.animationDuration=(4+Math.random()*4)+"s";
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),8000);
+ }
+}
+
+function fireworks(){
+ for(let i=0;i<120;i++){
+  let f=document.createElement("div");
+  f.className="fire";
+  f.style.left="50vw";
+  f.style.top="50vh";
+  f.style.background=`hsl(${Math.random()*360},100%,60%)`;
+  f.style.setProperty('--x',(Math.random()*600-300)+"px");
+  f.style.setProperty('--y',(Math.random()*600-300)+"px");
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),1200);
+ }
+}
+
+function slideshow(){
+ const slides=document.querySelectorAll(".slide");
+ let i=0;
+ slides[0].style.opacity=1;
+ setInterval(()=>{
+  slides[i].style.opacity=0;
+  i=(i+1)%slides.length;
+  slides[i].style.opacity=1;
+ },2500);
+}
+
+env.onclick=()=>{
+ env.classList.add("open");
+ music.play();
+ fireworks();
+
+ setTimeout(()=>env.style.opacity=0,1000);
+
+ setTimeout(()=>{
+  name.style.opacity=1;
+  name.style.transform="scale(1)";
+ },1200);
+
+ setTimeout(()=>{
+  name.style.opacity=0;
+  big.style.opacity=1;
+  big.style.transform="scale(1)";
+  emojis();
+ },2600);
+
+ setTimeout(()=> big.style.opacity=0 ,6500);
+
+ setTimeout(()=>{
+  letter.style.opacity=1;
+  letter.style.transform="translateY(0) scale(1)";
+  typeWriter(message);
+  slideshow();
+  fill.style.width="100%";
+ },7600);
+}
+</script>
+
+</body>
+</html>
