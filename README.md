@@ -1,2 +1,0 @@
-# HEHE
-FAYAR AAHNEE
